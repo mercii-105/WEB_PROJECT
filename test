@@ -1,0 +1,346 @@
+# 🌟 DEVOPS LAB – ALL 7 EXPERIMENTS (ONE TEXT FILE STYLE NOTES)
+
+---
+
+# ✅ Experiment 1 – Git Operations + Pull Request
+
+## Aim:
+
+To perform Git commands, create branch, push code, and merge using Pull Request.
+
+## Commands:
+
+```bash id="q1c1"
+mkdir myproject
+cd myproject
+git init
+echo "My DevOps Project" > README.md
+git add README.md
+git commit -m "Initial commit"
+git checkout -b feature/hello
+echo "Hello from feature branch" > hello.txt
+git add hello.txt
+git commit -m "Added hello.txt"
+git remote add origin <repo-url>
+git push -u origin feature/hello
+```
+
+## GitHub Website:
+
+Create Pull Request → Merge Pull Request
+
+## Final:
+
+```bash id="q1c2"
+git checkout main
+git pull origin main
+```
+
+## Expected Output:
+
+Repository created, branch merged successfully.
+
+---
+
+# ✅ Experiment 2 – Dockerize Flask App + Push Docker Hub
+
+## Aim:
+
+To containerize Flask application using Docker.
+
+## app.py
+
+```python id="q2c1"
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return "Hello from Dockerized Flask!"
+
+app.run(host='0.0.0.0', port=5000)
+```
+
+## requirements.txt
+
+```txt id="q2c2"
+flask
+```
+
+## Dockerfile
+
+```dockerfile id="q2c3"
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python","app.py"]
+```
+
+## Commands:
+
+```bash id="q2c4"
+docker build -t username/flask-app .
+docker run -p 5000:5000 username/flask-app
+docker login
+docker push username/flask-app
+```
+
+## Expected Output:
+
+Open browser:
+
+```text id="q2c5"
+http://localhost:5000
+```
+
+Shows:
+
+```text id="q2c6"
+Hello from Dockerized Flask!
+```
+
+---
+
+# ✅ Experiment 3 – Monolithic Application using Flask
+
+## Aim:
+
+To develop monolithic application using Flask.
+
+## app.py
+
+```python id="q3c1"
+from flask import Flask, request
+
+app = Flask(__name__)
+students = []
+
+@app.route('/')
+def home():
+    return "Monolithic App"
+
+@app.route('/students', methods=['GET'])
+def view():
+    return str(students)
+
+@app.route('/students', methods=['POST'])
+def add():
+    students.append(request.json)
+    return "Student Added"
+
+app.run(debug=True)
+```
+
+## Commands:
+
+```bash id="q3c2"
+pip install flask
+python app.py
+```
+
+## Expected Output:
+
+```text id="q3c3"
+http://localhost:5000
+```
+
+Shows Monolithic App
+
+---
+
+# ✅ Experiment 4 – CI Pipeline using GitHub Actions
+
+## Aim:
+
+To build and push Docker image automatically.
+
+## File:
+
+```text id="q4c1"
+.github/workflows/docker-publish.yml
+```
+
+## YAML:
+
+```yaml id="q4c2"
+name: CI Pipeline
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - run: docker build -t myapp .
+```
+
+## Commands:
+
+```bash id="q4c3"
+git add .
+git commit -m "CI added"
+git push
+```
+
+## Expected Output:
+
+Green tick in GitHub Actions.
+
+---
+
+# ✅ Experiment 5 – Jenkins Pipeline
+
+## Aim:
+
+To automate build/test/deploy using Jenkins.
+
+## Commands:
+
+```bash id="q5c1"
+docker run -d -p 8080:8080 -p 50000:50000 --name jenkins jenkins/jenkins:lts
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+## Open:
+
+```text id="q5c2"
+http://localhost:8080
+```
+
+## Pipeline Script:
+
+```groovy id="q5c3"
+pipeline {
+ agent any
+ stages {
+   stage('Build'){ steps{ echo 'Build' } }
+   stage('Test'){ steps{ echo 'Test' } }
+   stage('Deploy'){ steps{ echo 'Deploy' } }
+ }
+}
+```
+
+## Expected Output:
+
+```text id="q5c4"
+Finished: SUCCESS
+```
+
+---
+
+# ✅ Experiment 6 – Kubernetes Commands
+
+## Aim:
+
+To create, scale, expose deployment.
+
+## Commands:
+
+```bash id="q6c1"
+kubectl create deployment myapp --image=nginx
+kubectl get deployments
+kubectl get pods
+kubectl scale deployment myapp --replicas=3
+kubectl expose deployment myapp --port=80 --type=NodePort
+kubectl get services
+kubectl delete service myapp
+kubectl delete deployment myapp
+```
+
+## Expected Output:
+
+Deployment and pods created successfully.
+
+---
+
+# ✅ Experiment 7 – GitHub Actions with Docker Buildx
+
+## Aim:
+
+To build and push Docker image using Buildx.
+
+## File:
+
+```text id="q7c1"
+.github/workflows/buildx.yml
+```
+
+## YAML:
+
+```yaml id="q7c2"
+name: Buildx Pipeline
+
+on:
+ push:
+   branches: [main]
+
+jobs:
+ docker:
+   runs-on: ubuntu-latest
+
+   steps:
+    - uses: actions/checkout@v3
+    - uses: docker/setup-buildx-action@v3
+```
+
+## Commands:
+
+```bash id="q7c3"
+git add .
+git commit -m "Buildx added"
+git push
+```
+
+## Expected Output:
+
+Docker image pushed automatically.
+
+---
+
+# 🎤 QUICK VIVA QUESTIONS
+
+## What is Git?
+
+Version control system.
+
+## What is Docker?
+
+Container platform.
+
+## What is Jenkins?
+
+Automation server.
+
+## What is Kubernetes?
+
+Container orchestration tool.
+
+## What is CI/CD?
+
+Automatic build, test, deploy process.
+
+---
+
+# 💀 MOST IMPORTANT TO MEMORIZE
+
+```bash id="last1"
+git init
+docker build
+python app.py
+git push
+kubectl get pods
+docker run
+```
+
+---
+
+# 😈 BRO THIS IS YOUR WHOLE LAB SYLLABUS IN ONE CHAT.
+
+If you want, I can also make **2-hour before exam mug-up version** (only important commands + outputs).
